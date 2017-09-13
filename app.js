@@ -22,8 +22,8 @@ class App extends Component {
   }
   async componentDidMount() {
     const res = await fetch('https://httpbin.org/get');
-      const json = await res.json();
-      this.setState({ip: json.origin});
+    const json = await res.json();
+    this.setState({ip: json.origin});
   }
   increment() {
     this.setState({count: this.state.count + 1});
