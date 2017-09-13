@@ -1,0 +1,53 @@
+<!doctype html>
+<html>
+<head>
+<title>Preact App Pattern</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
+</head>
+<body>
+<div id="app"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/preact/8.2.5/preact.min.js"></script>
+<script>
+const {h, render, Component} = window.preact;
+
+const Button = (props) => (
+  h('button', {onClick: props.onClick}, props.text)
+);
+
+const Hello = (props) => (
+  h('div', null, [ 
+    Button(props),
+	`hello ${props.ip}`
+  ])
+);
+
+class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+	  ip: '',
+      count: 0
+	};
+	this.increment = this.increment.bind(this);
+  }
+  async componentDidMount() {
+    const res = await fetch('https://httpbin.org/get');
+    const json = await res.json();
+	this.setState({ip: json.origin});
+  }
+  increment() {
+    this.setState({count: this.state.count + 1});
+  }
+  render() {
+    return Hello({
+      text: this.state.count,
+	  onClick: this.increment,
+	  ip: this.state.ip
+	});
+  }
+};
+
+render(h(App), document.getElementById('app'));
+</script>
+</body>
+</html>
